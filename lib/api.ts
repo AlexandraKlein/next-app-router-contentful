@@ -113,7 +113,6 @@ export async function getPostAndMorePosts(
     preview
   );
 
-  console.log(entry);
   return {
     post: extractPost(entry),
     morePosts: extractPostEntries(entries),
