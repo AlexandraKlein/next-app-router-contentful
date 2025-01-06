@@ -1,11 +1,25 @@
 const POST_GRAPHQL_FIELDS = `
   slug
   title
+  coverImage {
+    url
+  }
+  date
+  author {
+    name
+    picture {
+      url
+    }
+  }
+  excerpt
+  content {
+    json
+  }
 `;
 
 export interface ContentfulFetchOptions {
   query: string;
-  headers?: HeadersInit; // eslint-disable-line no-undef
+  headers?: HeadersInit;
   variables?: Object;
 }
 
@@ -28,25 +42,7 @@ async function fetchGraphQL(
       body: JSON.stringify({ query }),
       next: { tags: ["posts"] },
     }
-  ).then((response) => {
-    if (!response.ok) {
-      // MOCK DATA
-      return {
-        data: {
-          postCollection: {
-            items: [
-              {
-                slug: "mock-slug",
-                title: "mock-title",
-                date: new Date().toISOString(),
-              },
-            ],
-          },
-        },
-      };
-    }
-    return response.json();
-  });
+  ).then((response) => response.json());
 }
 
 function extractPost(fetchResponse: any): any {
@@ -60,7 +56,7 @@ function extractPostEntries(fetchResponse: any): any[] {
 export async function getPreviewPostBySlug(slug: string | null): Promise<any> {
   const entry = await fetchGraphQL(
     `query {
-      postCollection(where: { slug: "${slug}" }, preview: true, limit: 1) {
+      postCollection(limit: 20, where: { slug: "${slug}" }, preview: true, limit: 1) {
         items {
           ${POST_GRAPHQL_FIELDS}
         }
@@ -74,7 +70,7 @@ export async function getPreviewPostBySlug(slug: string | null): Promise<any> {
 export async function getAllPosts(isDraftMode: boolean): Promise<any[]> {
   const entries = await fetchGraphQL(
     `query {
-      postCollection(where: { slug_exists: true }, order: date_DESC, preview: ${
+      postCollection(limit: 20, where: { slug_exists: true }, order: date_DESC, preview: ${
         isDraftMode ? "true" : "false"
       }) {
         items {
@@ -84,6 +80,7 @@ export async function getAllPosts(isDraftMode: boolean): Promise<any[]> {
     }`,
     isDraftMode
   );
+
   return extractPostEntries(entries);
 }
 
@@ -115,6 +112,8 @@ export async function getPostAndMorePosts(
     }`,
     preview
   );
+
+  console.log(entry);
   return {
     post: extractPost(entry),
     morePosts: extractPostEntries(entries),
