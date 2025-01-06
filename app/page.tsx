@@ -84,6 +84,13 @@ export default async function Page() {
 
   return (
     <div className="container mx-auto px-5">
+      {isEnabled && (
+        <h2 className="mb-4 mt-4 text-xl leading-tight tracking-tight">
+          <Link href="/api/disable-draft" className="hover:underline">
+            Disable Preview Mode
+          </Link>
+        </h2>
+      )}
       <Intro />
       {heroPost && (
         <HeroPost
