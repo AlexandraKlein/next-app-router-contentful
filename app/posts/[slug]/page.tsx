@@ -14,7 +14,8 @@ export async function generateStaticParams() {
 
 export default async function PostPage({ params }: any) {
   const { isEnabled } = await draftMode();
-  const { post, morePosts } = await getPostAndMorePosts(params.slug, isEnabled);
+  const { slug } = await params;
+  const { post, morePosts } = await getPostAndMorePosts(slug, isEnabled);
 
   return (
     <div>
@@ -23,14 +24,6 @@ export default async function PostPage({ params }: any) {
       </h2>
       <article>
         <h1>{post.title}</h1>
-        <div>
-          {/* {post.author && (
-            <Avatar name={post.author.name} picture={post.author.picture} />
-          )} */}
-        </div>
-        <div>
-          {/* <CoverImage title={post.title} url={post.coverImage.url} /> */}
-        </div>
         <div>
           <Markdown content={post.content} />
         </div>

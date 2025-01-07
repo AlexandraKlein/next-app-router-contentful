@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { draftMode } from "next/headers";
-
 import { getAllPosts } from "@/lib/api";
 
 export default async function Page() {
@@ -22,37 +21,24 @@ export default async function Page() {
       {heroPost && (
         <section>
           <div>
-            {/* <CoverImage title={title} slug={slug} url={coverImage.url} /> */}
+            <h3>
+              <Link href={`/posts/${heroPost.slug}`}>{heroPost.title}</Link>
+            </h3>
           </div>
           <div>
-            <div>
-              <h3>
-                <Link href={`/posts/${heroPost.slug}`}>{heroPost.title}</Link>
-              </h3>
-            </div>
-            <div>
-              <p>{heroPost.excerpt}</p>
-              {/* {heroPost.author && (
-                <Avatar
-                  name={heroPost.author.name}
-                  picture={heroPost.author.picture}
-                />
-              )} */}
-            </div>
+            <p>{heroPost.excerpt}</p>
           </div>
         </section>
       )}
       <section>
-        <h2>More Stories</h2>
-        <div>
-          {morePosts.map((post, index) => (
-            <h3>
-              <Link key={index} href={`/posts/${post.slug}`}>
-                {post.title}
-              </Link>
-            </h3>
-          ))}
-        </div>
+        <h2>More Stories:</h2>
+        {morePosts.map((post, index) => (
+          <h3>
+            <Link key={index} href={`/posts/${post.slug}`}>
+              {post.title}
+            </Link>
+          </h3>
+        ))}
       </section>
     </div>
   );
