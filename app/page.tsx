@@ -45,9 +45,11 @@ export default async function Page() {
       <section>
         <h2>More Stories</h2>
         <div>
-          {morePosts.map((post) => (
+          {morePosts.map((post, index) => (
             <h3>
-              <Link href={`/posts/${post.slug}`}>{post.title}</Link>
+              <Link key={index} href={`/posts/${post.slug}`}>
+                {post.title}
+              </Link>
             </h3>
           ))}
         </div>
